@@ -1,0 +1,209 @@
+/* ================================
+      Estructura del Navbar
+=================================*/
+.navbar {
+  transition: all 0.3s ease;
+  padding: 1rem 0;
+  z-index: 1030;
+}
+
+.navbar-transparent {
+  background: rgba(30, 41, 59, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-scrolled {
+  background: var(--tech-dark);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 0;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+/* Logo y marca */
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+}
+
+.tech-icon {
+  color: var(--tech-cyan);
+  font-size: 1.8rem;
+}
+
+.brand-text {
+  display: inline-block;
+  background: var(--tech-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.tech-word {
+  font-weight: 800;
+}
+
+.store-word {
+  font-weight: 300;
+}
+
+/* Barra de búsqueda */
+.search-container {
+  flex-grow: 1;
+  max-width: 500px;
+  margin: 0 2rem;
+}
+
+.tech-search {
+  border-radius: 50px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tech-search .form-control {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  padding: 0.75rem 1.5rem;
+}
+
+.tech-search .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.search-btn {
+  background: var(--tech-gradient);
+  border: none;
+  padding: 0 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+  opacity: 0.9;
+}
+
+.search-icon {
+  color: white;
+}
+
+/* Items de navegación */
+.nav-item {
+  margin: 0 0.25rem;
+}
+
+.nav-link {
+  color: var(--tech-light) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--tech-cyan) !important;
+}
+
+.nav-link.active {
+  color: white !important;
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 1rem;
+  right: 1rem;
+  height: 2px;
+  background: var(--tech-cyan);
+  border-radius: 2px;
+}
+
+/* Iconos */
+.icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.icon-link:hover {
+  background: rgba(6, 182, 212, 0.2);
+  transform: translateY(-2px);
+}
+
+.nav-icon {
+  color: white;
+  font-size: 1.1rem;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: bold;
+}
+
+/* Botón hamburguesa */
+.tech-toggler {
+  border: none;
+  padding: 0.5rem;
+}
+
+.toggler-icon {
+  color: white;
+  font-size: 1.8rem;
+  transition: transform 0.3s ease;
+}
+
+.tech-toggler:hover .toggler-icon {
+  transform: rotate(90deg);
+}
+
+/* Menú móvil */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    background: var(--tech-dark);
+    margin-top: 1rem;
+    border-radius: 10px;
+    padding: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .nav-item {
+    margin: 0.25rem 0;
+  }
+
+  .nav-link {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .nav-link.active::after {
+    left: 1rem;
+    right: auto;
+    width: 4px;
+    height: 80%;
+    top: 10%;
+    bottom: auto;
+  }
+}

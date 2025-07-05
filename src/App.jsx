@@ -1,7 +1,10 @@
+import Routes from "./Routes";
+import "./shared/styles/styles.css";
+
 function App() {
   return (
     <>
-      <h1>Welcome to My App</h1>
+      <Routes />
     </>
   );
 }
