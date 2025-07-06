@@ -1,6 +1,15 @@
 /* ================================
       Estructura del Navbar
 =================================*/
+:root {
+  --tech-blue: #2563eb;
+  --tech-dark: #1e293b;
+  --tech-cyan: #06b6d4;
+  --tech-gradient: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+  --tech-light: #f8fafc;
+}
+
+/* Estructura principal */
 .navbar {
   transition: all 0.3s ease;
   padding: 1rem 0;
@@ -46,14 +55,6 @@
   -webkit-text-fill-color: transparent;
 }
 
-.tech-word {
-  font-weight: 800;
-}
-
-.store-word {
-  font-weight: 300;
-}
-
 /* Barra de búsqueda */
 .search-container {
   flex-grow: 1;
@@ -95,13 +96,15 @@
 
 /* Items de navegación */
 .nav-item {
-  margin: 0 0.25rem;
+  margin: 0 0.5rem;
+  /* Aumentado de 0.25rem */
 }
 
 .nav-link {
   color: var(--tech-light) !important;
   font-weight: 500;
-  padding: 0.5rem 1rem !important;
+  padding: 0.75rem 1.25rem !important;
+  /* Aumentado el padding */
   position: relative;
   transition: all 0.3s ease;
 }
@@ -119,60 +122,78 @@
   content: '';
   position: absolute;
   bottom: 0;
-  left: 1rem;
-  right: 1rem;
+  left: 1.25rem;
+  right: 1.25rem;
   height: 2px;
   background: var(--tech-cyan);
   border-radius: 2px;
 }
 
-/* Iconos */
+/* Iconos - Versión Mejorada */
 .icon-link {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  /* Aumentado de 40px */
+  height: 48px;
+  /* Aumentado de 40px */
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+  margin: 0 0.5rem;
+  /* Aumentado el margen */
 }
 
 .icon-link:hover {
-  background: rgba(6, 182, 212, 0.2);
-  transform: translateY(-2px);
+  background: rgba(6, 182, 212, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .nav-icon {
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
+  /* Aumentado de 1.1rem */
+  transition: transform 0.2s ease;
 }
 
+.icon-link:hover .nav-icon {
+  transform: scale(1.1);
+}
+
+/* Badge del carrito mejorado */
 .cart-badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
+  top: -2px;
+  right: -2px;
   background: #ef4444;
   color: white;
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  /* Aumentado de 20px */
+  height: 24px;
+  /* Aumentado de 20px */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
+  /* Aumentado de 0.7rem */
   font-weight: bold;
+  border: 2px solid var(--tech-dark);
 }
 
 /* Botón hamburguesa */
 .tech-toggler {
   border: none;
-  padding: 0.5rem;
+  padding: 0.75rem;
+  /* Aumentado el padding */
 }
 
 .toggler-icon {
   color: white;
-  font-size: 1.8rem;
+  font-size: 2rem;
+  /* Aumentado de 1.8rem */
   transition: transform 0.3s ease;
 }
 
@@ -186,24 +207,215 @@
     background: var(--tech-dark);
     margin-top: 1rem;
     border-radius: 10px;
-    padding: 1rem;
+    padding: 1.5rem;
+    /* Aumentado el padding */
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   }
 
   .nav-item {
-    margin: 0.25rem 0;
+    margin: 0.5rem 0;
+    /* Aumentado el margen */
   }
 
   .nav-link {
-    padding: 0.75rem 1rem !important;
+    padding: 1rem 1.25rem !important;
+    /* Aumentado el padding */
+    font-size: 1.1rem;
+  }
+
+  .icon-link {
+    width: 44px;
+    height: 44px;
+    margin: 0.75rem 0;
+    display: inline-flex;
+  }
+
+  .nav-icon {
+    font-size: 1.3rem;
+  }
+
+  .cart-badge {
+    width: 22px;
+    height: 22px;
   }
 
   .nav-link.active::after {
-    left: 1rem;
-    right: auto;
-    width: 4px;
+    left: 1.25rem;
+    width: 5px;
     height: 80%;
-    top: 10%;
-    bottom: auto;
+  }
+}
+
+/* ================================
+      Estructura del Footer
+=================================*/
+.footer {
+  background-color: #1d1f20;
+  color: white;
+  padding: 40px 20px 20px;
+}
+
+.footer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-section {
+  flex: 1 1 250px;
+}
+
+.footer-section h5,
+.footer-section h6 {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.footer-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-section ul li {
+  margin-bottom: 8px;
+}
+
+.footer-section ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.footer-section ul li a:hover {
+  text-decoration: underline;
+}
+
+.social-icons a {
+  margin-right: 10px;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.footer-bottom hr {
+  border-color: #444;
+  margin-bottom: 10px;
+}
+
+
+/* ================================
+      Estructura del Home
+=================================*/
+/* Estilos generales */
+.categories-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.categories-header {
+  margin-top: 6rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.categories-header h1 {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.categories-header p {
+  font-size: 1.1rem;
+  color: #7f8c8d;
+}
+
+/* Grid de categorías */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+/* Tarjetas de categoría */
+.category-card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  background: white;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.category-image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.product-count {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.category-info {
+  padding: 1.5rem;
+}
+
+.category-info h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.category-info p {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.explore-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.explore-btn:hover {
+  background: #2980b9;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .categories-header h1 {
+    font-size: 2rem;
   }
 }

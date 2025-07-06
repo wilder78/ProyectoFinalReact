@@ -1,24 +1,13 @@
-import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaShoppingCart, FaUser, FaMicrochip } from "react-icons/fa";
+import { FaMicrochip } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
-// import "./navbar.css";
+import Cart from "../../features/cart/Cart";
+import Login from "../../features/auth/Login";
+import useNavbarBehavior from "../hooks/useNavbarBehavior";
 
 function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-
-  const toggleNavbar = () => setIsOpen(!isOpen);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const { isOpen, setIsOpen, scrolled, toggleNavbar } = useNavbarBehavior();
 
   return (
     <nav
@@ -60,7 +49,7 @@ function Navbar() {
               { path: "/productos", name: "Productos" },
               { path: "/categorias", name: "Categorías" },
               { path: "/ofertas", name: "Ofertas" },
-              { path: "/contacto", name: "Contacto" },
+              { path: "/registro", name: "Registro" },
             ].map((item) => (
               <li className="nav-item mx-1" key={item.path}>
                 <Link
@@ -76,27 +65,8 @@ function Navbar() {
             ))}
 
             {/* Íconos perfil y carrito */}
-            <li className="nav-item ms-2">
-              <Link
-                className="nav-link icon-link"
-                to="/perfil"
-                aria-label="Perfil"
-                onClick={() => setIsOpen(false)}
-              >
-                <FaUser className="nav-icon" />
-              </Link>
-            </li>
-            <li className="nav-item ms-2 position-relative">
-              <Link
-                className="nav-link icon-link"
-                to="/carrito"
-                aria-label="Carrito"
-                onClick={() => setIsOpen(false)}
-              >
-                <FaShoppingCart className="nav-icon" />
-                <span className="cart-badge">3</span>
-              </Link>
-            </li>
+            <Login onClose={() => setIsOpen(false)} />
+            <Cart />
           </ul>
         </div>
       </div>
