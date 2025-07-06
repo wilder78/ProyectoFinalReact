@@ -8,7 +8,15 @@
   --gray-light: rgb(237, 237, 237);
   --shadow-light: rgba(0, 0, 0, 0.1);
   --shadow-medium: rgba(0, 0, 0, 0.15);
+  --tech-primary: #2563eb;
+  --tech-secondary: #1e40af;
+  --tech-accent: #3b82f6;
+  --tech-dark: #1e293b;
+  --tech-light: #f8fafc;
+  --tech-hover: #60a5fa;
+
 }
+
 
 /* Reset básico */
 * {

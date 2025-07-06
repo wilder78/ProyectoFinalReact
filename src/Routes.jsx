@@ -8,7 +8,6 @@ import Home from "./features/pages/Home";
 import Productos from "./features/pages/Products";
 import Categorias from "./features/pages/Categories";
 import Ofertas from "./features/pages/Offers";
-import Perfil from "./features/pages/Register";
 import Register from "./features/pages/Register";
 
 function AppRoutes() {
@@ -22,7 +21,6 @@ function AppRoutes() {
         <Route path="/categorias" element={<Categorias />} />
         <Route path="/ofertas" element={<Ofertas />} />
         <Route path="/registro" element={<Register />} />
-        <Route path="/perfil" element={<Perfil />} />
       </Routes>
 
       <Footer />

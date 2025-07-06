@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import {
   FaUser,
@@ -7,6 +8,7 @@ import {
   FaSignInAlt,
 } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
+import Swal from "sweetalert2";
 import "swiper/css";
 import "./register.css";
 
@@ -22,12 +24,126 @@ function Register() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [userRegistered, setUserRegistered] = useState(false);
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const [alertShown, setAlertShown] = useState({
+    documento: false,
+    nombres: false,
+    apellidos: false,
+    email: false,
+    password: false,
+  });
+
+  const showAlert = (field, title, text) => {
+    if (!alertShown[field]) {
+      Swal.fire({ icon: "warning", title, html: text });
+      setAlertShown((prev) => ({ ...prev, [field]: true }));
+    }
+  };
+
+  const resetAlert = (field) => {
+    setAlertShown((prev) => ({ ...prev, [field]: false }));
+  };
+
+  const handleDocumentoChange = (e) => {
+    const value = e.target.value;
+    if (!/^\d*$/.test(value)) return;
+
+    setFormData((prev) => ({ ...prev, documento: value }));
+
+    if ((value.length > 0 && value.length < 8) || value.length > 11) {
+      showAlert(
+        "documento",
+        "Documento inválido",
+        "Debe tener entre 9 y 11 dígitos numéricos."
+      );
+    } else {
+      resetAlert("documento");
+    }
+  };
+
+  const handleNombresChange = (e) => {
+    const value = e.target.value;
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
+      showAlert(
+        "nombres",
+        "Nombre inválido",
+        "Solo se permiten letras y espacios. No uses símbolos como @ - * +."
+      );
+      return;
+    }
+
+    if (value.length > 35) {
+      showAlert(
+        "nombres",
+        "Nombre demasiado largo",
+        "Máximo 35 caracteres permitidos."
+      );
+      return;
+    }
+
+    setFormData((prev) => ({ ...prev, nombres: value }));
+    resetAlert("nombres");
+  };
+
+  const handleApellidosChange = (e) => {
+    const value = e.target.value;
+    if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
+      showAlert(
+        "apellidos",
+        "Apellido inválido",
+        "Solo se permiten letras y espacios. No uses símbolos como @ - * +."
+      );
+      return;
+    }
+
+    if (value.length > 35) {
+      showAlert(
+        "apellidos",
+        "Apellido demasiado largo",
+        "Máximo 35 caracteres permitidos."
+      );
+      return;
+    }
+
+    setFormData((prev) => ({ ...prev, apellidos: value }));
+    resetAlert("apellidos");
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    if (value && !value.includes("@")) {
+      showAlert(
+        "email",
+        "Correo inválido",
+        "El correo electrónico debe contener el símbolo '@'."
+      );
+    } else {
+      resetAlert("email");
+    }
+    setFormData((prev) => ({ ...prev, email: value }));
+  };
+
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+
+    const isValid =
+      /[A-Z]/.test(value) && // mayúscula
+      /\d/.test(value) && // número
+      /[*\/\-+]/.test(value) && // símbolo permitido
+      value.length >= 8;
+
+    if (!isValid && value.length > 0) {
+      showAlert(
+        "password",
+        "Contraseña débil",
+        "Debe contener al menos:<br/>• 8 caracteres<br/>• 1 letra mayúscula<br/>• 1 número<br/>• 1 símbolo como <b>* / - +</b>"
+      );
+    } else if (isValid) {
+      resetAlert("password");
+    }
+
+    setFormData((prev) => ({ ...prev, password: value }));
   };
 
   const handleSubmit = (e) => {
@@ -36,8 +152,27 @@ function Register() {
 
     setTimeout(() => {
       console.log("Usuario registrado:", formData);
+
+      // ✅ Guardar en localStorage
+      const existingUsers = JSON.parse(localStorage.getItem("usuarios")) || [];
+      existingUsers.push(formData);
+      localStorage.setItem("usuarios", JSON.stringify(existingUsers));
+
       setIsSubmitting(false);
-      setUserRegistered(true); // cambia la vista al swiper
+      setUserRegistered(true);
+
+      Swal.fire({
+        icon: "success",
+        title: "¡Registro exitoso!",
+        text: `Bienvenido/a, ${formData.nombres}`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      // ✅ Redireccionar al inicio
+      setTimeout(() => {
+        window.location.href = "http://localhost:5173/";
+      }, 2200);
     }, 1500);
   };
 
@@ -63,7 +198,7 @@ function Register() {
                     id="documento"
                     name="documento"
                     value={formData.documento}
-                    onChange={handleChange}
+                    onChange={handleDocumentoChange}
                     placeholder="Ingrese su número de documento"
                     required
                   />
@@ -79,7 +214,7 @@ function Register() {
                     id="nombres"
                     name="nombres"
                     value={formData.nombres}
-                    onChange={handleChange}
+                    onChange={handleNombresChange}
                     placeholder="Ingrese sus nombres"
                     required
                   />
@@ -95,7 +230,7 @@ function Register() {
                     id="apellidos"
                     name="apellidos"
                     value={formData.apellidos}
-                    onChange={handleChange}
+                    onChange={handleApellidosChange}
                     placeholder="Ingrese sus apellidos"
                     required
                   />
@@ -111,7 +246,7 @@ function Register() {
                     id="email"
                     name="email"
                     value={formData.email}
-                    onChange={handleChange}
+                    onChange={handleEmailChange}
                     placeholder="ejemplo@correo.com"
                     required
                   />
@@ -128,7 +263,7 @@ function Register() {
                       id="password"
                       name="password"
                       value={formData.password}
-                      onChange={handleChange}
+                      onChange={handlePasswordChange}
                       placeholder="Cree una contraseña segura"
                       required
                     />
