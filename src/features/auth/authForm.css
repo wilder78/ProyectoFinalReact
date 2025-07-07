@@ -1,0 +1,196 @@
+/* authForm.css - Estilo Moderno Tech */
+
+/* Variables de diseño */
+:root {
+  --primary-blue: #2563eb;
+  --dark-blue: #1e40af;
+  --light-blue: #93c5fd;
+  --dark-bg: #1e293b;
+  --light-bg: #f8fafc;
+  --gray-border: #e2e8f0;
+  --text-dark: #1e293b;
+  --text-light: #f8fafc;
+  --error-red: #ef4444;
+}
+
+/* Contenedor principal */
+.login3-container {
+  max-width: 480px;
+  margin: 100px auto 2rem;
+  padding: 2.5rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--gray-border);
+  position: relative;
+  overflow: hidden;
+}
+
+.login3-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary-blue), var(--dark-blue));
+}
+
+/* Título */
+.login3-container h2 {
+  text-align: center;
+  color: var(--text-dark);
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  position: relative;
+  padding-bottom: 0.8rem;
+}
+
+.login3-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: var(--primary-blue);
+  border-radius: 2px;
+}
+
+/* Formulario */
+.login3-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+}
+
+/* Grupos de formulario */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--text-dark);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.form-group label svg {
+  color: var(--primary-blue);
+  font-size: 1rem;
+}
+
+/* Campos de entrada */
+.form-group input {
+  padding: 1rem 1.2rem;
+  border: 2px solid var(--gray-border);
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: var(--light-bg);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+  background-color: white;
+}
+
+.form-group input::placeholder {
+  color: #94a3b8;
+  opacity: 0.8;
+  font-size: 0.95rem;
+}
+
+/* Contenedor de contraseña */
+.password-input {
+  position: relative;
+  display: flex;
+}
+
+.password-input input {
+  flex: 1;
+  padding-right: 110px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--primary-blue);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.toggle-password:hover {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+/* Botón de envío */
+.submit-btn {
+  background: linear-gradient(135deg, var(--primary-blue), var(--dark-blue));
+  color: white;
+  border: none;
+  padding: 1.1rem;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.2);
+}
+
+.submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.25);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn svg {
+  font-size: 1rem;
+}
+
+/* Efectos para móviles */
+@media (max-width: 600px) {
+  .login3-container {
+    padding: 1.8rem;
+    margin: 80px 1.5rem 2rem;
+    border-radius: 12px;
+  }
+  
+  .password-input input {
+    padding-right: 90px;
+  }
+  
+  .toggle-password {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .submit-btn {
+    padding: 1rem;
+  }
+}

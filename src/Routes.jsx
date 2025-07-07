@@ -9,6 +9,7 @@ import Productos from "./features/pages/Products";
 import Categorias from "./features/pages/Categories";
 import Ofertas from "./features/pages/Offers";
 import Register from "./features/pages/Register";
+import LoginForm from "./features/auth/LoginForm";
 
 function AppRoutes() {
   return (
@@ -21,6 +22,7 @@ function AppRoutes() {
         <Route path="/categorias" element={<Categorias />} />
         <Route path="/ofertas" element={<Ofertas />} />
         <Route path="/registro" element={<Register />} />
+        <Route path="/login" element={<LoginForm />} />
       </Routes>
 
       <Footer />

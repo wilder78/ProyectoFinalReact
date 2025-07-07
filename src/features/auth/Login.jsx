@@ -7,8 +7,8 @@ function Login({ onClose }) {
     <li className="nav-item ms-2">
       <Link
         className="nav-link icon-link"
-        to="/perfil"
-        aria-label="Perfil"
+        to="/login" // <-- Aquí cambias /perfil por /login
+        aria-label="Iniciar sesión"
         onClick={onClose}
       >
         <FaUser className="nav-icon" />
