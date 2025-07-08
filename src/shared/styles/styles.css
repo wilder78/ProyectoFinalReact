@@ -1,192 +1,184 @@
 /* ================================
       Estructura del Navbar
 =================================*/
-/* navbar.css - Versión Mejorada (Solo colores y apariencia) */
-
 /* Colores base para la temática tecnológica */
 :root {
-    --tech-primary: #2563eb;
-    /* Azul más vibrante */
-    --tech-secondary: #1e40af;
-    /* Azul más oscuro */
-    --tech-accent: #3b82f6;
-    /* Azul intermedio */
-    --tech-dark: #1e293b;
-    /* Fondo oscuro */
-    --tech-light: #f8fafc;
-    /* Texto claro */
-    --tech-hover: #60a5fa;
-    /* Efecto hover */
+  --tech-primary: #2563eb;
+  --tech-secondary: #1e40af;
+  --tech-accent: #3b82f6;
+  --tech-dark: #1e293b;
+  --tech-light: #f8fafc;
+  --tech-hover: #60a5fa;
 }
 
 /* Barra de navegación general */
 .navbar {
-    transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 .navbar-transparent {
-    background: rgba(30, 41, 59, 0.9) !important;
-    /* Fondo oscuro semi-transparente */
-    backdrop-filter: blur(10px);
+  background: rgba(30, 41, 59, 0.9) !important;
+  /* Fondo oscuro semi-transparente */
+  backdrop-filter: blur(10px);
 }
 
 .navbar-scrolled {
-    background: var(--tech-dark) !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: var(--tech-dark) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* Logo y marca */
 .tech-icon {
-    color: var(--tech-accent);
-    font-size: 1.8rem;
-    transition: transform 0.3s ease;
+  color: var(--tech-accent);
+  font-size: 1.8rem;
+  transition: transform 0.3s ease;
 }
 
 .tech-icon:hover {
-    transform: rotate(15deg);
+  transform: rotate(15deg);
 }
 
 .brand-text {
-    font-weight: 700;
-    font-size: 1.5rem;
-    letter-spacing: 0.5px;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
 }
 
 .tech-word {
-    color: var(--tech-accent);
+  color: var(--tech-accent);
 }
 
 .store-word {
-    color: var(--tech-light);
+  color: var(--tech-light);
 }
 
 /* Botón hamburguesa */
 .tech-toggler {
-    border: none;
-    outline: none;
-    box-shadow: none !important;
+  border: none;
+  outline: none;
+  box-shadow: none !important;
 }
 
 .toggler-icon {
-    color: var(--tech-light);
-    font-size: 1.5rem;
-    transition: all 0.3s ease;
+  color: var(--tech-light);
+  font-size: 1.5rem;
+  transition: all 0.3s ease;
 }
 
 .tech-toggler:hover .toggler-icon {
-    color: var(--tech-accent);
-    transform: scale(1.1);
+  color: var(--tech-accent);
+  transform: scale(1.1);
 }
 
 /* Enlaces de navegación */
 .nav-link {
-    color: var(--tech-light) !important;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    margin: 0 0.1rem;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    position: relative;
+  color: var(--tech-light) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  margin: 0 0.1rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .nav-link:hover {
-    color: white !important;
-    background: rgba(59, 130, 246, 0.1);
+  color: white !important;
+  background: rgba(59, 130, 246, 0.1);
 }
 
 .nav-link.active {
-    color: white !important;
-    font-weight: 600;
+  color: white !important;
+  font-weight: 600;
 }
 
 .nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 3px;
-    background: var(--tech-accent);
-    border-radius: 3px;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 3px;
+  background: var(--tech-accent);
+  border-radius: 3px;
 }
 
 /* Componentes de Login y Cart (solo apariencia) */
 .login-button,
 .cart-button {
-    background: var(--tech-primary);
-    color: white !important;
-    border: none;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 100px;
+  background: var(--tech-primary);
+  color: white !important;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
 }
 
 .login-button:hover,
 .cart-button:hover {
-    background: var(--tech-secondary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--tech-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .login-button:active,
 .cart-button:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 .login-button i,
 .cart-button i {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
 /* Badge del carrito */
 .cart-badge {
-    background: #ef4444;
-    color: white;
-    border-radius: 50%;
-    padding: 0.2rem 0.4rem;
-    font-size: 0.7rem;
-    font-weight: bold;
-    margin-left: 5px;
-    animation: pulse 1.5s infinite;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin-left: 5px;
+  animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
+  0% {
+    transform: scale(1);
+  }
 
-    50% {
-        transform: scale(1.1);
-    }
+  50% {
+    transform: scale(1.1);
+  }
 
-    100% {
-        transform: scale(1);
-    }
+  100% {
+    transform: scale(1);
+  }
 }
 
 /* Efecto para móviles */
 @media (max-width: 991.98px) {
-    .navbar-collapse {
-        background: var(--tech-dark);
-        padding: 1rem;
-        border-radius: 0 0 10px 10px;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
+  .navbar-collapse {
+    background: var(--tech-dark);
+    padding: 1rem;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
 
-    .nav-link {
-        margin: 0.25rem 0;
-        padding: 0.75rem 1rem;
-    }
+  .nav-link {
+    margin: 0.25rem 0;
+    padding: 0.75rem 1rem;
+  }
 
-    .nav-link.active::after {
-        display: none;
-    }
+  .nav-link.active::after {
+    display: none;
+  }
 }
 
 

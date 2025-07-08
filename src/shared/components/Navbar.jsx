@@ -1,76 +1,51 @@
-import { Link, useLocation } from "react-router-dom";
-import { FaMicrochip } from "react-icons/fa";
-import { GiHamburgerMenu } from "react-icons/gi";
-import Cart from "../../features/cart/Cart";
-import Login from "../../features/auth/Login";
-import useNavbarBehavior from "../hooks/useNavbarBehavior";
+import React from "react";
+import "./navbar.css"; // Importa el archivo CSS del Navbar
 
 function Navbar() {
-  const location = useLocation();
-  const { isOpen, setIsOpen, scrolled, toggleNavbar } = useNavbarBehavior();
-
   return (
-    <nav
-      className={`navbar navbar-expand-lg ${
-        scrolled ? "navbar-scrolled" : "navbar-transparent"
-      } fixed-top`}
-    >
-      <div className="container">
-        {/* Logo con icono tecnológico */}
-        <Link className="navbar-brand d-flex align-items-center" to="/">
-          <FaMicrochip className="tech-icon me-2" />
-          <span className="brand-text">
-            <span className="tech-word">Tech</span>
-            <span className="store-word">Store</span>
-          </span>
-        </Link>
+    <>
+      <nav class="q-navbar" role="navigation" aria-label="Menú principal">
+        <a href="#" class="q-brand">
+          <div class="q-logo" aria-hidden="true">
+            <i class="fas fa-atom" aria-hidden="true"></i>
+          </div>
+          <span class="q-brand-text">QuantumTech</span>
+        </a>
 
-        {/* Toggle Button */}
-        <button
-          className="navbar-toggler tech-toggler"
-          type="button"
-          onClick={toggleNavbar}
-          aria-controls="navbarNav"
-          aria-expanded={isOpen}
-          aria-label="Toggle navigation"
-        >
-          <GiHamburgerMenu className="toggler-icon" />
-        </button>
-
-        {/* Nav Items */}
-        <div
-          className={`collapse navbar-collapse ${isOpen ? "show" : ""}`}
-          id="navbarNav"
-        >
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
-            {/* Enlaces */}
-            {[
-              { path: "/", name: "Inicio" },
-              { path: "/productos", name: "Productos" },
-              { path: "/categorias", name: "Categorías" },
-              { path: "/ofertas", name: "Ofertas" },
-              { path: "/registro", name: "Registro" },
-            ].map((item) => (
-              <li className="nav-item mx-1" key={item.path}>
-                <Link
-                  className={`nav-link ${
-                    location.pathname === item.path ? "active" : ""
-                  }`}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              </li>
-            ))}
-
-            {/* Íconos perfil y carrito */}
-            <Login onClose={() => setIsOpen(false)} />
-            <Cart />
-          </ul>
+        <div class="q-nav-menu" id="navMenu">
+          <a href="#" class="q-nav-item active">
+            Inicio
+          </a>
+          <a href="#productos" class="q-nav-item">
+            Productos
+          </a>
+          <a href="#registro" class="q-register-btn" role="button">
+            <i class="fas fa-user-plus"></i>
+            <span>Regístrate</span>
+          </a>
+          <a href="#carrito" class="q-cart-btn" role="button">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Carrito</span>
+            <span class="q-cart-count" aria-label="3 artículos">
+              3
+            </span>
+          </a>
         </div>
-      </div>
-    </nav>
+
+        <button
+          class="q-hamburger"
+          id="hamburger"
+          aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="navMenu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </nav>
+    </>
   );
 }
 

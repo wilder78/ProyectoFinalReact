@@ -30,104 +30,150 @@ export function useRegisterForm(navigate) {
     setAlertShown((prev) => ({ ...prev, [field]: false }));
   };
 
+  // Validaciones individuales
+  const validations = {
+    documento: (value) => {
+      if (!/^\d{8,11}$/.test(value)) {
+        showAlert(
+          "documento",
+          "Documento inválido",
+          "Debe tener entre 8 y 11 dígitos numéricos."
+        );
+        return false;
+      }
+      resetAlert("documento");
+      return true;
+    },
+
+    nombres: (value) => {
+      if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{1,35}$/.test(value)) {
+        showAlert(
+          "nombres",
+          "Nombre inválido",
+          "Solo letras y espacios (máximo 35 caracteres). No uses @ - * +."
+        );
+        return false;
+      }
+      resetAlert("nombres");
+      return true;
+    },
+
+    apellidos: (value) => {
+      if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{1,35}$/.test(value)) {
+        showAlert(
+          "apellidos",
+          "Apellido inválido",
+          "Solo letras y espacios (máximo 35 caracteres). No uses @ - * +."
+        );
+        return false;
+      }
+      resetAlert("apellidos");
+      return true;
+    },
+
+    email: (value) => {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        showAlert(
+          "email",
+          "Correo inválido",
+          "Debe ser un correo electrónico válido (ejemplo@dominio.com)."
+        );
+        return false;
+      }
+      resetAlert("email");
+      return true;
+    },
+
+    password: (value) => {
+      const hasUppercase = /[A-Z]/.test(value);
+      const hasNumber = /\d/.test(value);
+      const hasSymbol = /[!@#$%^&*()_\-+=\[\]{};':"\\|,.<>\/?]/.test(value);
+      const hasMinLength = value.length >= 8;
+
+      if (!(hasUppercase && hasNumber && hasSymbol && hasMinLength)) {
+        showAlert(
+          "password",
+          "Contraseña débil",
+          `Debe tener al menos:<br/>
+          • 8 caracteres<br/>
+          • 1 mayúscula<br/>
+          • 1 número<br/>
+          • 1 símbolo como ! @ # $ % & * - / etc.`
+        );
+        return false;
+      }
+      resetAlert("password");
+      return true;
+    },
+  };
+
   const handleChange = {
     documento: (e) => {
       const value = e.target.value;
       if (!/^\d*$/.test(value)) return;
-
       setFormData((prev) => ({ ...prev, documento: value }));
-
-      if ((value.length > 0 && value.length < 8) || value.length > 11) {
-        showAlert(
-          "documento",
-          "Documento inválido",
-          "Debe tener entre 9 y 11 dígitos numéricos."
-        );
-      } else {
-        resetAlert("documento");
-      }
+      validations.documento(value);
     },
 
     nombres: (e) => {
       const value = e.target.value;
-      if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
-        showAlert(
-          "nombres",
-          "Nombre inválido",
-          "Solo letras y espacios. No uses @ - * +."
-        );
-        return;
-      }
-      if (value.length > 35) {
-        showAlert("nombres", "Nombre muy largo", "Máximo 35 caracteres.");
-        return;
-      }
       setFormData((prev) => ({ ...prev, nombres: value }));
-      resetAlert("nombres");
+      validations.nombres(value);
     },
 
     apellidos: (e) => {
       const value = e.target.value;
-      if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/.test(value)) {
-        showAlert(
-          "apellidos",
-          "Apellido inválido",
-          "Solo letras y espacios. No uses @ - * +."
-        );
-        return;
-      }
-      if (value.length > 35) {
-        showAlert("apellidos", "Apellido muy largo", "Máximo 35 caracteres.");
-        return;
-      }
       setFormData((prev) => ({ ...prev, apellidos: value }));
-      resetAlert("apellidos");
+      validations.apellidos(value);
     },
 
     email: (e) => {
       const value = e.target.value;
-      if (value && !value.includes("@")) {
-        showAlert("email", "Correo inválido", "Debe contener el símbolo '@'.");
-      } else {
-        resetAlert("email");
-      }
       setFormData((prev) => ({ ...prev, email: value }));
+      validations.email(value);
     },
 
     password: (e) => {
       const value = e.target.value;
-      const isValid =
-        /[A-Z]/.test(value) &&
-        /\d/.test(value) &&
-        /[*\/\-+]/.test(value) &&
-        value.length >= 8;
-
-      if (!isValid && value.length > 0) {
-        showAlert(
-          "password",
-          "Contraseña débil",
-          "Debe tener al menos:<br/>• 8 caracteres<br/>• 1 mayúscula<br/>• 1 número<br/>• 1 símbolo como * / - +"
-        );
-      } else if (isValid) {
-        resetAlert("password");
-      }
       setFormData((prev) => ({ ...prev, password: value }));
+      validations.password(value);
     },
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    return (
+      validations.documento(formData.documento) &&
+      validations.nombres(formData.nombres) &&
+      validations.apellidos(formData.apellidos) &&
+      validations.email(formData.email) &&
+      validations.password(formData.password)
+    );
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      Swal.fire({
+        icon: "error",
+        title: "Formulario inválido",
+        text: "Por favor complete todos los campos correctamente.",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
-    setTimeout(() => {
+    try {
+      // Simular llamada a API
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Guardar en localStorage
       const existingUsers = JSON.parse(localStorage.getItem("usuarios")) || [];
       existingUsers.push(formData);
       localStorage.setItem("usuarios", JSON.stringify(existingUsers));
 
-      setIsSubmitting(false);
-
-      Swal.fire({
+      await Swal.fire({
         icon: "success",
         title: "¡Registro exitoso!",
         text: `Bienvenido/a, ${formData.nombres}`,
@@ -135,9 +181,16 @@ export function useRegisterForm(navigate) {
         showConfirmButton: false,
       });
 
-      // Redirigir al inicio
-      setTimeout(() => navigate("/"), 2200);
-    }, 1500);
+      navigate("/");
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ocurrió un error al registrar. Por favor intente nuevamente.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return {
