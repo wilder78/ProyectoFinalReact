@@ -1,190 +1,353 @@
 /* ================================
       Estructura del Navbar
 =================================*/
-/* Colores base para la temática tecnológica */
-:root {
-  --tech-primary: #2563eb;
-  --tech-secondary: #1e40af;
-  --tech-accent: #3b82f6;
-  --tech-dark: #1e293b;
-  --tech-light: #f8fafc;
-  --tech-hover: #60a5fa;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Barra de navegación general */
-.navbar {
-  transition: all 0.3s ease-in-out;
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--dark);
+  color: var(--light);
 }
 
-.navbar-transparent {
-  background: rgba(30, 41, 59, 0.9) !important;
-  /* Fondo oscuro semi-transparente */
+
+/* Navbar Principal */
+.q-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--glass);
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(110, 0, 255, 0.2);
+  z-index: 1000;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.navbar-scrolled {
-  background: var(--tech-dark) !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+.q-navbar.scrolled {
+  padding: 0.5rem 2rem;
+  background: rgba(10, 10, 30, 0.95);
+  box-shadow: 0 5px 30px rgba(0, 240, 255, 0.1);
 }
 
-/* Logo y marca */
-.tech-icon {
-  color: var(--tech-accent);
-  font-size: 1.8rem;
-  transition: transform 0.3s ease;
+/* Logo y Brand */
+.q-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-decoration: none;
 }
 
-.tech-icon:hover {
-  transform: rotate(15deg);
-}
-
-.brand-text {
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: 0.5px;
-}
-
-.tech-word {
-  color: var(--tech-accent);
-}
-
-.store-word {
-  color: var(--tech-light);
-}
-
-/* Botón hamburguesa */
-.tech-toggler {
-  border: none;
-  outline: none;
-  box-shadow: none !important;
-}
-
-.toggler-icon {
-  color: var(--tech-light);
-  font-size: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.tech-toggler:hover .toggler-icon {
-  color: var(--tech-accent);
-  transform: scale(1.1);
-}
-
-/* Enlaces de navegación */
-.nav-link {
-  color: var(--tech-light) !important;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  margin: 0 0.1rem;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  position: relative;
-}
-
-.nav-link:hover {
-  color: white !important;
-  background: rgba(59, 130, 246, 0.1);
-}
-
-.nav-link.active {
-  color: white !important;
-  font-weight: 600;
-}
-
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 3px;
-  background: var(--tech-accent);
-  border-radius: 3px;
-}
-
-/* Componentes de Login y Cart (solo apariencia) */
-.login-button,
-.cart-button {
-  background: var(--tech-primary);
-  color: white !important;
-  border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
+.q-logo {
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 100px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
 }
 
-.login-button:hover,
-.cart-button:hover {
-  background: var(--tech-secondary);
+.q-logo::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(transparent 0deg,
+      transparent 180deg,
+      rgba(255, 255, 255, 0.8) 180deg,
+      transparent 360deg);
+  animation: rotate 4s linear infinite;
+}
+
+.q-logo i {
+  position: relative;
+  z-index: 2;
+  color: var(--dark);
+  font-size: 1.2rem;
+}
+
+.q-brand-text {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Menú de Navegación */
+.q-nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.q-nav-item {
+  position: relative;
+  text-decoration: none;
+  color: var(--light);
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
+  opacity: 0.9;
+}
+
+.q-nav-item::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--primary), var(--accent));
+  transition: width 0.3s ease;
+}
+
+.q-nav-item:hover {
+  opacity: 1;
+  color: var(--primary);
+}
+
+.q-nav-item:hover::before {
+  width: 100%;
+}
+
+.q-nav-item.active {
+  opacity: 1;
+  color: var(--primary);
+}
+
+.q-nav-item.active::before {
+  width: 100%;
+}
+
+/* Botón de Registro */
+.q-register-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--accent), #ff0066);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(255, 0, 170, 0.3);
+}
+
+.q-register-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to bottom right,
+      rgba(255, 255, 255, 0.3) 0%,
+      rgba(255, 255, 255, 0) 60%);
+  transform: rotate(30deg);
+  transition: all 0.5s ease;
+}
+
+.q-register-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 25px rgba(255, 0, 170, 0.5);
 }
 
-.login-button:active,
-.cart-button:active {
-  transform: translateY(0);
+.q-register-btn:hover::before {
+  left: 100%;
 }
 
-.login-button i,
-.cart-button i {
-  margin-right: 8px;
+/* Botón de Carrito con Notificación */
+.q-cart-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(110, 0, 255, 0.1));
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* Badge del carrito */
-.cart-badge {
-  background: #ef4444;
+.q-cart-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(110, 0, 255, 0.2));
+  box-shadow: var(--neon-glow);
+}
+
+.q-cart-count {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--accent);
   color: white;
   border-radius: 50%;
-  padding: 0.2rem 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 0.7rem;
   font-weight: bold;
-  margin-left: 5px;
-  animation: pulse 1.5s infinite;
+}
+
+/* Menú Mobile */
+.q-hamburger {
+  display: none;
+  cursor: pointer;
+  width: 30px;
+  height: 20px;
+  position: relative;
+  z-index: 1001;
+}
+
+.q-hamburger span {
+  display: block;
+  position: absolute;
+  height: 3px;
+  width: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: all 0.3s ease;
+}
+
+.q-hamburger span:nth-child(1) {
+  top: 0;
+}
+
+.q-hamburger span:nth-child(2),
+.q-hamburger span:nth-child(3) {
+  top: 10px;
+}
+
+.q-hamburger span:nth-child(4) {
+  top: 20px;
+}
+
+.q-hamburger.open span:nth-child(1) {
+  top: 10px;
+  width: 0%;
+  left: 50%;
+}
+
+.q-hamburger.open span:nth-child(2) {
+  transform: rotate(45deg);
+}
+
+.q-hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg);
+}
+
+.q-hamburger.open span:nth-child(4) {
+  top: 10px;
+  width: 0%;
+  left: 50%;
+}
+
+/* Efecto de Partículas (Opcional) */
+.q-particle {
+  position: absolute;
+  background: var(--primary);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Animaciones */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes pulse {
   0% {
-    transform: scale(1);
+    opacity: 0.6;
   }
 
   50% {
-    transform: scale(1.1);
+    opacity: 1;
   }
 
   100% {
-    transform: scale(1);
+    opacity: 0.6;
   }
 }
 
-/* Efecto para móviles */
-@media (max-width: 991.98px) {
-  .navbar-collapse {
-    background: var(--tech-dark);
-    padding: 1rem;
-    border-radius: 0 0 10px 10px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+/* Responsive */
+@media (max-width: 992px) {
+  .q-hamburger {
+    display: block;
   }
 
-  .nav-link {
-    margin: 0.25rem 0;
-    padding: 0.75rem 1rem;
+  .q-nav-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 350px;
+    height: 100vh;
+    background: rgba(10, 10, 30, 0.98);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    padding: 2rem;
+    transition: right 0.5s ease;
+    border-left: 1px solid rgba(0, 240, 255, 0.2);
   }
 
-  .nav-link.active::after {
-    display: none;
+  .q-nav-menu.open {
+    right: 0;
   }
+
+  .q-register-btn,
+  .q-cart-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
 }
+
 
 
 /* ================================
       Estructura del Footer
 =================================*/
+.footer {
+  margin-top: auto;
+}
+
 .footer {
   background-color: #1d1f20;
   color: white;
