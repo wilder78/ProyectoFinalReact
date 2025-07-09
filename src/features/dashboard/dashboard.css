@@ -1,36 +1,54 @@
-/* Variables de color */
+/* ====================
+   VARIABLES Y CONFIG BASE
+   ==================== */
 :root {
+  /* Colores principales */
   --sidebar-bg: #1a1f36;
   --sidebar-text: #e2e8f0;
   --sidebar-hover: #4fd1c5;
   --sidebar-active: #38b2ac;
+
+  /* Colores del área de contenido */
   --content-bg: #f7fafc;
   --content-text: #2d3748;
   --card-bg: #ffffff;
+
+  /* Efectos visuales */
   --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --sidebar-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+
+  /* Colores de estado */
   --danger: #e53e3e;
   --danger-hover: #c53030;
+
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
 }
 
-/* Estructura principal */
+/* ====================
+   ESTRUCTURA PRINCIPAL
+   ==================== */
 .dashboard-container {
   display: flex;
   min-height: 100vh;
   background-color: var(--content-bg);
   color: var(--content-text);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
-/* Sidebar - Panel lateral */
+/* ====================
+   BARRA LATERAL (SIDEBAR)
+   ==================== */
 .sidebar {
   width: 260px;
   background-color: var(--sidebar-bg);
   color: var(--sidebar-text);
   display: flex;
   flex-direction: column;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--sidebar-shadow);
 }
 
+/* Encabezado del sidebar */
 .sidebar-header {
   padding: 1.5rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -49,7 +67,7 @@
   color: var(--sidebar-hover);
 }
 
-/* Navegación */
+/* Navegación principal */
 .dashboard-nav {
   flex-grow: 1;
   padding: 1rem 0;
@@ -73,7 +91,7 @@
   align-items: center;
   gap: 0.75rem;
   font-size: 0.95rem;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   border-left: 3px solid transparent;
 }
 
@@ -101,7 +119,9 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Botón de salida */
+/* ====================
+   BOTONES
+   ==================== */
 .exit-btn {
   width: 100%;
   padding: 0.75rem;
@@ -111,7 +131,7 @@
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--transition-fast);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,7 +142,9 @@
   background-color: var(--danger-hover);
 }
 
-/* Contenido principal */
+/* ====================
+   ÁREA DE CONTENIDO
+   ==================== */
 .dashboard-content {
   flex-grow: 1;
   padding: 2rem;
@@ -135,40 +157,71 @@
   margin: 0 auto;
 }
 
-/* Responsive */
+/* ====================
+   DISEÑO RESPONSIVE
+   ==================== */
 @media (max-width: 768px) {
   .dashboard-container {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
     height: auto;
   }
-  
+
   .dashboard-nav {
     display: flex;
     overflow-x: auto;
     padding: 0.5rem 0;
+    scrollbar-width: thin;
   }
-  
+
   .dashboard-nav ul {
     display: flex;
+    padding: 0 0.5rem;
   }
-  
+
   .dashboard-nav li {
-    margin-bottom: 0;
-    margin-right: 0.5rem;
+    margin: 0 0.25rem 0 0;
+    flex-shrink: 0;
   }
-  
+
   .dashboard-nav a {
     padding: 0.5rem 1rem;
     border-left: none;
     border-bottom: 3px solid transparent;
   }
-  
+
   .dashboard-nav a.active {
     border-left: none;
     border-bottom-color: var(--sidebar-active);
   }
+}
+
+/* ====================
+   MEJORAS ADICIONALES
+   ==================== */
+/* Scrollbar personalizada para navegadores WebKit */
+.dashboard-nav::-webkit-scrollbar {
+  height: 4px;
+}
+
+.dashboard-nav::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+}
+
+/* Mejora de accesibilidad para enfoque */
+.dashboard-nav a:focus-visible,
+.exit-btn:focus-visible {
+  outline: 2px solid var(--sidebar-hover);
+  outline-offset: 2px;
+}
+
+.dashboard-content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--content-text);
+  margin-bottom: 1rem;
 }
