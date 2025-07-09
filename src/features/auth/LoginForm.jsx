@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
 import "./authForm.css";
@@ -8,6 +8,13 @@ function LoginForm() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Guardar ruta previa cuando se carga el formulario
+  useEffect(() => {
+    const previousPath = location.state?.from || "/";
+    localStorage.setItem("previousPath", previousPath);
+  }, [location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,11 +24,9 @@ function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Recuperar usuarios registrados del localStorage
     const storedUsers = localStorage.getItem("usuarios");
     const users = storedUsers ? JSON.parse(storedUsers) : [];
 
-    // Buscar coincidencia por email y contraseña
     const userFound = users.find(
       (user) =>
         user.email.toLowerCase() === credentials.email.toLowerCase() &&
@@ -29,10 +34,8 @@ function LoginForm() {
     );
 
     if (userFound) {
-      // Guardar sesión (opcional)
       localStorage.setItem("sesion", JSON.stringify(userFound));
 
-      // Mostrar bienvenida
       Swal.fire({
         icon: "success",
         title: "Bienvenido/a",
@@ -41,8 +44,9 @@ function LoginForm() {
         showConfirmButton: false,
       });
 
-      // Redirigir tras un pequeño delay
-      setTimeout(() => navigate("/perfil"), 2200);
+      // Recuperar la última ruta desde localStorage
+      const previousPath = localStorage.getItem("previousPath") || "/";
+      setTimeout(() => navigate(previousPath), 2200);
     } else {
       Swal.fire({
         icon: "error",

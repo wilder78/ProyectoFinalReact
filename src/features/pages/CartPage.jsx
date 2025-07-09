@@ -1,11 +1,41 @@
 import React from "react";
 import { useCart } from "../cart/CartContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaShoppingBasket, FaArrowRight } from "react-icons/fa";
+import Swal from "sweetalert2";
 import "./cartPage.css";
 
 function CartPage() {
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCart(); // ← Asegúrate de tener `clearCart` en tu contexto
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    const sesion = localStorage.getItem("sesion");
+
+    if (!sesion) {
+      Swal.fire({
+        icon: "warning",
+        title: "Inicio de sesión requerido",
+        text: "Por favor inicia sesión para continuar con la compra.",
+        confirmButtonText: "Iniciar sesión",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate("/login");
+        }
+      });
+    } else {
+      Swal.fire({
+        icon: "success",
+        title: "¡Compra realizada!",
+        text: "Gracias por tu compra. Pronto recibirás la confirmación por correo.",
+        timer: 2500,
+        showConfirmButton: false,
+      }).then(() => {
+        clearCart();             // ← Vacía el carrito
+        navigate("/productos");  // ← Redirige a productos
+      });
+    }
+  };
 
   return (
     <div className="cart-page">
@@ -73,7 +103,9 @@ function CartPage() {
 
           <div className="cart-summary">
             <h3>Total: ${getCartTotal().toFixed(2)}</h3>
-            <button className="checkout-button">Proceder al Pago</button>
+            <button className="checkout-button" onClick={handleCheckout}>
+              Proceder al Pago
+            </button>
           </div>
         </div>
       )}

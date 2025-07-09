@@ -1,10 +1,14 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import useNavbarBehavior from "../hooks/useNavbarBehavior";
+import { useCart } from "../../features/cart/CartContext";
 
 const Navbar = () => {
   const { scrolled, menuOpen, toggleMenu, closeMenu } = useNavbarBehavior();
   const location = useLocation();
+  const { cartItems } = useCart();
+
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <nav className={`q-navbar ${scrolled ? "scrolled" : ""}`}>
@@ -36,7 +40,6 @@ const Navbar = () => {
           Productos
         </Link>
 
-        {/* Botón de Iniciar sesión */}
         <Link
           to="/login"
           className={`q-login-btn ${
@@ -48,7 +51,6 @@ const Navbar = () => {
           <span>Iniciar sesión</span>
         </Link>
 
-        {/* Botón de Registro */}
         <Link
           to="/registro"
           className={`q-register-btn ${
@@ -60,7 +62,7 @@ const Navbar = () => {
           <span>Regístrate</span>
         </Link>
 
-        {/* Botón de Carrito */}
+        {/* Carrito */}
         <Link
           to="/carrito"
           className={`q-cart-btn ${
@@ -70,7 +72,7 @@ const Navbar = () => {
         >
           <i className="fas fa-shopping-cart"></i>
           <span>Carrito</span>
-          <span className="q-cart-count">3</span>
+          {cartCount > 0 && <span className="q-cart-count">{cartCount}</span>}
         </Link>
       </div>
 
