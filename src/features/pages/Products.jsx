@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useCart } from "../cart/CartContext"; // Importa el hook useCart
 import "./Products.css";
 
 function Products() {
@@ -6,7 +7,9 @@ function Products() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("phone");
-  const [cart, setCart] = useState([]);
+
+  // Usa el contexto del carrito en lugar del estado local
+  const { addToCart, getCartItemCount } = useCart();
 
   // Términos de búsqueda para productos tecnológicos
   const techCategories = [
@@ -43,18 +46,8 @@ function Products() {
     fetchProducts();
   }, [searchTerm]);
 
-  const addToCart = (product) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
-      if (existingItem) {
-        return prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      }
-      return [...prevCart, { ...product, quantity: 1 }];
-    });
+  const handleAddToCart = (product) => {
+    addToCart(product); // Usa la función del contexto
     alert(`${product.title} añadido al carrito`);
   };
 
@@ -95,9 +88,8 @@ function Products() {
 
         <div className="cart-summary">
           <i className="fas fa-shopping-cart"></i>
-          <span>
-            {cart.reduce((total, item) => total + item.quantity, 0)} items
-          </span>
+          <span>{getCartItemCount()} items</span>{" "}
+          {/* Usa la función del contexto */}
         </div>
       </div>
 
@@ -168,7 +160,7 @@ function Products() {
 
                   <button
                     className="add-to-cart-btn"
-                    onClick={() => addToCart(product)}
+                    onClick={() => handleAddToCart(product)}
                   >
                     <i className="fas fa-shopping-cart"></i> Añadir al carrito
                   </button>
@@ -180,7 +172,6 @@ function Products() {
           <div className="load-more">
             <button
               onClick={() => {
-                // Lógica para cargar más productos
                 alert("Funcionalidad de cargar más productos");
               }}
             >

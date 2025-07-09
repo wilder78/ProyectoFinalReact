@@ -17,6 +17,7 @@ import LoginForm from "./features/auth/LoginForm";
 import Users from "./features/dashboard/Users";
 import Clients from "./features/dashboard/Clients";
 import ProductsAdmin from "./features/dashboard/Products";
+import CartPage from "./features/pages/CartPage";
 
 function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ function AppRoutes() {
           <Route path="/ofertas" element={<Ofertas />} />
           <Route path="/registro" element={<Register />} />
           <Route path="/login" element={<LoginForm />} />
+          <Route path="/carrito" element={<CartPage />} />
         </Route>
 
         {/* Rutas del dashboard SIN Navbar y Footer */}
