@@ -23,7 +23,7 @@ function Footer() {
               <Link to="/productos">Productos</Link>
             </li>
             <li>
-              <Link to="/contacto">Contacto</Link>
+              <Link to="/dashboard">Dashboard</Link>
             </li>
             <li>
               <Link to="/politica">Política de privacidad</Link>

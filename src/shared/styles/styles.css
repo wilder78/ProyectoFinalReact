@@ -178,6 +178,8 @@ body {
   left: 100%;
 }
 
+
+
 /* Botón de Carrito con Notificación */
 .q-cart-btn {
   position: relative;
@@ -338,6 +340,35 @@ body {
   }
 
 }
+
+/* Botón de Iniciar sesión */
+.q-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(110, 0, 255, 0.2));
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: var(--primary);
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.q-login-btn:hover {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(110, 0, 255, 0.3));
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.q-login-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 
 
 

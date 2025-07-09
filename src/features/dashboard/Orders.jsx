@@ -1,19 +1,19 @@
 import React from "react";
 
-const Products = () => {
+const Orders = () => {
   return (
     <div>
-      <h3>Administrar Productos</h3>
+      <h3>Administrar Ordenes</h3>
     </div>
   );
 };
 
-export default Products;
+export default Orders;
 
 // function Products() {
 //   return (
 //     <div>
-//       <h3>Administrar Productos</h3>
+//       <h3>Administrar Ordenes</h3>
 //     </div>
 //   );
 // }

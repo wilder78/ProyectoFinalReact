@@ -37,6 +37,8 @@ function AppRoutes() {
           <Route path="users" element={<Users />} />
           <Route path="clients" element={<Clients />} />
           <Route path="products" element={<ProductsAdmin />} />
+          <Route path="settings" element={<div>Settings Page</div>} />
+          <Route path="orders" element={<div>Orders Page</div>} />
         </Route>
       </Routes>
     </BrowserRouter>

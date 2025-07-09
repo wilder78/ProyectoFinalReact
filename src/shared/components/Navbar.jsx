@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import useNavbarBehavior from "../hooks/useNavbarBehavior";
@@ -37,6 +36,19 @@ const Navbar = () => {
           Productos
         </Link>
 
+        {/* Botón de Iniciar sesión */}
+        <Link
+          to="/login"
+          className={`q-login-btn ${
+            location.pathname === "/login" ? "active" : ""
+          }`}
+          onClick={closeMenu}
+        >
+          <i className="fas fa-sign-in-alt"></i>
+          <span>Iniciar sesión</span>
+        </Link>
+
+        {/* Botón de Registro */}
         <Link
           to="/registro"
           className={`q-register-btn ${
@@ -48,6 +60,7 @@ const Navbar = () => {
           <span>Regístrate</span>
         </Link>
 
+        {/* Botón de Carrito */}
         <Link
           to="/carrito"
           className={`q-cart-btn ${

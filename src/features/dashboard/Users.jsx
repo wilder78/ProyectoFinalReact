@@ -1,11 +1,11 @@
-import React from 'react'
+import React from "react";
 
-function Users() {
+const Users = () => {
   return (
     <div>
       <h3>Administrar Usuarios</h3>
     </div>
-  )
-}
+  );
+};
 
-export default Users
+export default Users;
