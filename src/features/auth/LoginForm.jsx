@@ -17,21 +17,31 @@ function LoginForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem("usuarios")) || [];
-    const user = users.find(
-      (u) =>
-        u.email === credentials.email && u.password === credentials.password
+    // Recuperar usuarios registrados del localStorage
+    const storedUsers = localStorage.getItem("usuarios");
+    const users = storedUsers ? JSON.parse(storedUsers) : [];
+
+    // Buscar coincidencia por email y contraseña
+    const userFound = users.find(
+      (user) =>
+        user.email.toLowerCase() === credentials.email.toLowerCase() &&
+        user.password === credentials.password
     );
 
-    if (user) {
+    if (userFound) {
+      // Guardar sesión (opcional)
+      localStorage.setItem("sesion", JSON.stringify(userFound));
+
+      // Mostrar bienvenida
       Swal.fire({
         icon: "success",
         title: "Bienvenido/a",
-        text: `Hola, ${user.nombres}`,
+        text: `Hola, ${userFound.nombres}`,
         timer: 2000,
         showConfirmButton: false,
       });
 
+      // Redirigir tras un pequeño delay
       setTimeout(() => navigate("/perfil"), 2200);
     } else {
       Swal.fire({
