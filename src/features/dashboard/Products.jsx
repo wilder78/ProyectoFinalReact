@@ -6,10 +6,8 @@ import {
   FaTimesCircle,
   FaCheckCircle,
 } from "react-icons/fa";
-import "./dashboard.css"; // Ensure you have the necessary styles from the previous example
+import "./dashboard.css";
 
-// --- API Service (apiService.js) ---
-// Ideally, this would be in a separate file like `src/services/apiService.js`
 const API_BASE_URL = "https://api.escuelajs.co/api/v1";
 
 const productApiService = {
@@ -21,7 +19,6 @@ const productApiService = {
     return response.json();
   },
   getProductCategories: async () => {
-    // Fetch categories for the dropdown in the form
     const response = await fetch(`${API_BASE_URL}/categories`);
     if (!response.ok) {
       throw new Error("Failed to fetch categories");
@@ -64,12 +61,10 @@ const productApiService = {
       const errorData = await response.json();
       throw new Error(errorData.message || "Failed to delete product");
     }
-    return true; // Return true on successful deletion
+    return true;
   },
 };
 
-// --- Notification Component (Notification.js) ---
-// Re-using the same Notification component from the Users example
 const Notification = ({ message, type, onClose }) => {
   if (!message) return null;
 
@@ -84,8 +79,6 @@ const Notification = ({ message, type, onClose }) => {
   );
 };
 
-// --- ProductFormModal Component (ProductFormModal.js) ---
-// This would also ideally be a separate file
 const ProductFormModal = ({
   isOpen,
   onClose,
@@ -98,7 +91,7 @@ const ProductFormModal = ({
     title: "",
     price: "",
     description: "",
-    categoryId: "", // Initialize with empty string, will be set on edit or default
+    categoryId: "",
     images: ["https://placeimg.com/640/480/tech"],
   });
   const [formErrors, setFormErrors] = useState({});
@@ -121,11 +114,11 @@ const ProductFormModal = ({
         title: "",
         price: "",
         description: "",
-        categoryId: categories.length > 0 ? categories[0].id : "", // Default to first category
+        categoryId: categories.length > 0 ? categories[0].id : "",
         images: ["https://placeimg.com/640/480/tech"],
       });
     }
-    setFormErrors({}); // Clear errors when modal opens/product changes
+    setFormErrors({});
   }, [product, isOpen, categories]);
 
   const handleChange = (e) => {
@@ -170,8 +163,8 @@ const ProductFormModal = ({
     if (validateForm()) {
       onSave({
         ...formData,
-        price: Number(formData.price), // Ensure price is a number
-        categoryId: Number(formData.categoryId), // Ensure categoryId is a number
+        price: Number(formData.price),
+        categoryId: Number(formData.categoryId),
       });
     }
   };
@@ -292,25 +285,24 @@ const ProductsAdmin = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [notification, setNotification] = useState(null); // { message: "", type: "" }
+  const [notification, setNotification] = useState(null);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentProduct, setCurrentProduct] = useState(null); // Product being edited or null for new product
-  const [isSaving, setIsSaving] = useState(false); // For form submission loading state
-  const [categories, setCategories] = useState([]); // To store product categories for the form
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  const [categories, setCategories] = useState([]);
 
   const productsPerPage = 10;
 
   const fetchProductsAndCategories = useCallback(async () => {
     setLoading(true);
-    setError(null); // Clear previous errors
+    setError(null);
     try {
       const [productsData, categoriesData] = await Promise.all([
         productApiService.getProducts(),
         productApiService.getProductCategories(),
       ]);
 
-      // Basic validation and filtering of products for display
       const validProducts = productsData.filter(
         (product) =>
           product.title &&
@@ -321,13 +313,13 @@ const ProductsAdmin = () => {
           product.title.trim() !== "" &&
           product.description.trim() !== "" &&
           product.images[0].trim() !== "" &&
-          /^(ftp|http|https):\/\/[^ "]+$/.test(product.images[0]) // Simple URL regex
+          /^(ftp|http|https):\/\/[^ "]+$/.test(product.images[0])
       );
 
       setProducts(validProducts);
       setFilteredProducts(validProducts);
       setCategories(categoriesData);
-      setNotification(null); // Clear any previous error notification
+      setNotification(null);
     } catch (err) {
       console.error("Error fetching data:", err);
       setError(err.message || "Error al cargar productos o categorías.");
@@ -335,7 +327,7 @@ const ProductsAdmin = () => {
         message: err.message || "Error al cargar datos.",
         type: "error",
       });
-      setProducts([]); // Clear products on error
+      setProducts([]);
       setFilteredProducts([]);
       setCategories([]);
     } finally {
@@ -347,7 +339,6 @@ const ProductsAdmin = () => {
     fetchProductsAndCategories();
   }, [fetchProductsAndCategories]);
 
-  // Effect for search filtering
   useEffect(() => {
     const results = products.filter(
       (product) =>
@@ -356,10 +347,9 @@ const ProductsAdmin = () => {
         product.category?.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredProducts(results);
-    setCurrentPage(1); // Reset page when filtering
+    setCurrentPage(1);
   }, [searchTerm, products]);
 
-  // Pagination logic
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
@@ -373,12 +363,12 @@ const ProductsAdmin = () => {
   };
 
   const handleAddProductClick = () => {
-    setCurrentProduct(null); // No product selected, for creation
+    setCurrentProduct(null);
     setIsModalOpen(true);
   };
 
   const handleEditProductClick = (product) => {
-    setCurrentProduct(product); // Set the product to be edited
+    setCurrentProduct(product);
     setIsModalOpen(true);
   };
 
@@ -389,10 +379,9 @@ const ProductsAdmin = () => {
 
   const handleSaveProduct = async (formData) => {
     setIsSaving(true);
-    setError(null); // Clear previous errors
+    setError(null);
     try {
       if (currentProduct) {
-        // Update existing product
         const updatedProduct = await productApiService.updateProduct(
           currentProduct.id,
           formData
@@ -413,9 +402,8 @@ const ProductsAdmin = () => {
           type: "success",
         });
       } else {
-        // Create new product
         const newProduct = await productApiService.createProduct(formData);
-        setProducts((prev) => [newProduct, ...prev]); // Add new product to top
+        setProducts((prev) => [newProduct, ...prev]);
         setNotification({
           message: "Producto creado con éxito.",
           type: "success",
@@ -436,13 +424,13 @@ const ProductsAdmin = () => {
 
   const handleDeleteProduct = async (productId) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-      setError(null); // Clear previous errors
+      setError(null);
       try {
         await productApiService.deleteProduct(productId);
         setProducts((prev) => prev.filter((prod) => prod.id !== productId));
         setFilteredProducts((prev) =>
           prev.filter((prod) => prod.id !== productId)
-        ); // Also update filtered list
+        );
         setNotification({
           message: "Producto eliminado con éxito.",
           type: "success",
@@ -533,7 +521,7 @@ const ProductsAdmin = () => {
                         />
                       </td>
                       <td>{prod.title}</td>
-                      <td>${prod.price?.toFixed(2)}</td> {/* Format price */}
+                      <td>${prod.price?.toFixed(2)}</td>
                       <td>{prod.category?.name || "Sin categoría"}</td>
                       <td>
                         <button

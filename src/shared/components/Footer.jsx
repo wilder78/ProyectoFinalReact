@@ -6,7 +6,7 @@ function Footer() {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-section">
-          <h5>TechStore</h5>
+          <h5>QuantumTech</h5>
           <p>
             Tu tienda confiable de productos tecnológicos. Innovación al alcance
             de tu mano.

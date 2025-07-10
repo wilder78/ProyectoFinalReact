@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
+import { useAuth } from "../../context/AuthContext"; // Import useAuth hook
 import "./authForm.css";
 
 const LoginForm = () => {
@@ -10,6 +11,7 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth(); // Get the login function from AuthContext
 
   // Guardar ruta anterior
   useEffect(() => {
@@ -35,7 +37,8 @@ const LoginForm = () => {
     );
 
     if (userFound) {
-      localStorage.setItem("sesion", JSON.stringify(userFound));
+      // Instead of directly setting 'sesion' here, call the login function from AuthContext
+      login(userFound); // Pass the found user object to the login function
 
       Swal.fire({
         icon: "success",

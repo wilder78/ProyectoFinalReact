@@ -1,0 +1,36 @@
+/* ...existing code... */
+
+/* Navbar oscuro y sin cambio de color al hacer scroll */
+.q-navbar {
+    background: #222 !important;
+    color: #fff !important;
+    transition: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.q-navbar.scrolled {
+    background: #222 !important;
+    color: #fff !important;
+    transition: none !important;
+}
+
+/* Opcional: color de los enlaces y botones del navbar */
+.q-navbar .q-nav-item,
+.q-navbar .q-login-btn,
+.q-navbar .q-register-btn,
+.q-navbar .q-cart-btn {
+    color: #fff !important;
+}
+
+.q-navbar .q-nav-item.active,
+.q-navbar .q-login-btn.active,
+.q-navbar .q-register-btn.active,
+.q-navbar .q-cart-btn.active {
+    color: #ffd700 !important;
+    /* Amarillo para el activo, opcional */
+}
+
+/* Opcional: color del icono del logo */
+.q-navbar .q-logo i {
+    color: #fff !important;
+}
