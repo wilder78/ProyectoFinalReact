@@ -1,16 +1,17 @@
+// src/features/auth/LoginForm.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { FaEnvelope, FaLock, FaSignInAlt } from "react-icons/fa";
 import "./authForm.css";
 
-function LoginForm() {
+const LoginForm = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Guardar ruta previa cuando se carga el formulario
+  // Guardar ruta anterior
   useEffect(() => {
     const previousPath = location.state?.from || "/";
     localStorage.setItem("previousPath", previousPath);
@@ -44,9 +45,8 @@ function LoginForm() {
         showConfirmButton: false,
       });
 
-      // Recuperar la última ruta desde localStorage
       const previousPath = localStorage.getItem("previousPath") || "/";
-      setTimeout(() => navigate(previousPath), 2200);
+      setTimeout(() => navigate(previousPath), 2000);
     } else {
       Swal.fire({
         icon: "error",
@@ -105,6 +105,6 @@ function LoginForm() {
       </form>
     </div>
   );
-}
+};
 
 export default LoginForm;
