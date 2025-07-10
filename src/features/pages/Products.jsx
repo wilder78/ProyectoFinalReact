@@ -8,6 +8,7 @@ import {
   FaStar,
 } from "react-icons/fa";
 import "./Products.css";
+import Swal from "sweetalert2";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -102,7 +103,15 @@ function Products() {
         "https://via.placeholder.com/300x200?text=Imagen+no+disponible",
       quantity: 1,
     });
-    alert(`${product.title} añadido al carrito`);
+    Swal.fire({
+      icon: "success",
+      title: "¡Añadido al carrito!",
+      text: `${product.title} añadido al carrito`,
+      timer: 1500,
+      showConfirmButton: false,
+      position: "top-end",
+      toast: true,
+    });
   };
 
   const handleSearch = (e) => {

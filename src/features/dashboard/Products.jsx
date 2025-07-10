@@ -9,17 +9,24 @@ const ProductsAdmin = () => {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [formVisible, setFormVisible] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    price: "",
+    description: "",
+    categoryId: 1,
+    images: ["https://placeimg.com/640/480/tech"],
+  });
+  const [editingId, setEditingId] = useState(null);
   const productsPerPage = 10;
 
+  const API_URL = "https://api.escuelajs.co/api/v1/products";
+
   useEffect(() => {
-    const fetchAdminProducts = async () => {
+    const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          "https://api.escuelajs.co/api/v1/products"
-        );
-        if (!response.ok) {
-          throw new Error("Error al obtener productos");
-        }
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("Error al obtener productos");
         const data = await response.json();
         setProducts(data);
       } catch (err) {
@@ -29,35 +36,76 @@ const ProductsAdmin = () => {
       }
     };
 
-    fetchAdminProducts();
+    fetchProducts();
   }, []);
 
-  const filteredProducts = products.filter(
-    (product) =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.id.toString().includes(searchTerm)
+  const filteredProducts = products.filter((product) =>
+    product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  const indexOfLast = currentPage * productsPerPage;
+  const indexOfFirst = indexOfLast - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
-  const handleEdit = (productId) => {
-    console.log("Editar producto:", productId);
+  const handleEdit = (product) => {
+    setEditingId(product.id);
+    setFormData({
+      title: product.title,
+      price: product.price,
+      description: product.description,
+      categoryId: product.category?.id || 1,
+      images: product.images || ["https://placeimg.com/640/480/tech"],
+    });
+    setFormVisible(true);
   };
 
-  const handleDelete = (productId) => {
-    if (window.confirm("¿Estás seguro de eliminar este producto?")) {
-      setProducts(products.filter((product) => product.id !== productId));
+  const handleDelete = async (productId) => {
+    if (!window.confirm("¿Eliminar este producto?")) return;
+    try {
+      await fetch(`${API_URL}/${productId}`, { method: "DELETE" });
+      setProducts(products.filter((prod) => prod.id !== productId));
+    } catch (error) {
+      alert("Error eliminando producto");
     }
   };
 
   const handleAddProduct = () => {
-    console.log("Agregar nuevo producto");
+    setEditingId(null);
+    setFormData({
+      title: "",
+      price: "",
+      description: "",
+      categoryId: 1,
+      images: ["https://placeimg.com/640/480/tech"],
+    });
+    setFormVisible(true);
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const method = editingId ? "PUT" : "POST";
+      const url = editingId ? `${API_URL}/${editingId}` : API_URL;
+
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (editingId) {
+        setProducts((prev) => prev.map((p) => (p.id === editingId ? data : p)));
+      } else {
+        setProducts([data, ...products]);
+      }
+
+      setFormVisible(false);
+    } catch (err) {
+      alert("Error guardando el producto");
+    }
   };
 
   return (
@@ -80,6 +128,49 @@ const ProductsAdmin = () => {
         </div>
       </div>
 
+      {formVisible && (
+        <form className="product-form" onSubmit={handleFormSubmit}>
+          <input
+            type="text"
+            placeholder="Título"
+            value={formData.title}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
+            required
+          />
+          <input
+            type="number"
+            placeholder="Precio"
+            value={formData.price}
+            onChange={(e) =>
+              setFormData({ ...formData, price: Number(e.target.value) })
+            }
+            required
+          />
+          <textarea
+            placeholder="Descripción"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
+            required
+          />
+          <input
+            type="text"
+            placeholder="URL de imagen"
+            value={formData.images[0]}
+            onChange={(e) =>
+              setFormData({ ...formData, images: [e.target.value] })
+            }
+            required
+          />
+          <button type="submit">
+            {editingId ? "Guardar Cambios" : "Crear Producto"}
+          </button>
+        </form>
+      )}
+
       {loading ? (
         <div className="loading-container">
           <FaSpinner className="spinner" />
@@ -88,7 +179,6 @@ const ProductsAdmin = () => {
       ) : error ? (
         <div className="error-message">
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Reintentar</button>
         </div>
       ) : (
         <>
@@ -105,48 +195,39 @@ const ProductsAdmin = () => {
                 </tr>
               </thead>
               <tbody>
-                {currentProducts.length > 0 ? (
-                  currentProducts.map((prod) => (
-                    <tr key={prod.id}>
-                      <td>{prod.id}</td>
-                      <td>
-                        <div className="product-image">
-                          <img
-                            src={prod.images?.[0]}
-                            alt={prod.title}
-                            onError={(e) =>
-                              (e.target.src =
-                                "https://via.placeholder.com/60x40?text=Sin+imagen")
-                            }
-                          />
-                        </div>
-                      </td>
-                      <td className="product-title">{prod.title}</td>
-                      <td className="price">${prod.price?.toFixed(2)}</td>
-                      <td>{prod.category?.name || "Sin categoría"}</td>
-                      <td className="actions">
-                        <button
-                          className="btn-edit"
-                          onClick={() => handleEdit(prod.id)}
-                        >
-                          <FiEdit2 />
-                        </button>
-                        <button
-                          className="btn-delete"
-                          onClick={() => handleDelete(prod.id)}
-                        >
-                          <FiTrash2 />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="6" className="no-results">
-                      No se encontraron productos
+                {currentProducts.map((prod) => (
+                  <tr key={prod.id}>
+                    <td>{prod.id}</td>
+                    <td>
+                      <img
+                        src={prod.images?.[0]}
+                        alt={prod.title}
+                        width="50"
+                        onError={(e) =>
+                          (e.target.src =
+                            "https://via.placeholder.com/50?text=No+Img")
+                        }
+                      />
+                    </td>
+                    <td>{prod.title}</td>
+                    <td>${prod.price}</td>
+                    <td>{prod.category?.name || "Sin categoría"}</td>
+                    <td>
+                      <button
+                        className="btn-edit"
+                        onClick={() => handleEdit(prod)}
+                      >
+                        <FiEdit2 />
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDelete(prod.id)}
+                      >
+                        <FiTrash2 />
+                      </button>
                     </td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           </div>
@@ -159,17 +240,15 @@ const ProductsAdmin = () => {
               >
                 Anterior
               </button>
-
-              {Array.from({ length: totalPages }).map((_, index) => (
+              {Array.from({ length: totalPages }).map((_, i) => (
                 <button
-                  key={index}
-                  onClick={() => setCurrentPage(index + 1)}
-                  className={currentPage === index + 1 ? "active" : ""}
+                  key={i}
+                  className={currentPage === i + 1 ? "active" : ""}
+                  onClick={() => setCurrentPage(i + 1)}
                 >
-                  {index + 1}
+                  {i + 1}
                 </button>
               ))}
-
               <button
                 onClick={() =>
                   setCurrentPage((prev) => Math.min(prev + 1, totalPages))

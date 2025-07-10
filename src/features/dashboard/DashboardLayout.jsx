@@ -32,32 +32,12 @@ function DashboardLayout() {
             </li>
             <li>
               <Link
-                to="/dashboard/clients"
-                className={
-                  location.pathname === "/dashboard/clients" ? "active" : ""
-                }
-              >
-                <i className="fas fa-address-book"></i> Clientes
-              </Link>
-            </li>
-            <li>
-              <Link
                 to="/dashboard/products"
                 className={
                   location.pathname === "/dashboard/products" ? "active" : ""
                 }
               >
                 <i className="fas fa-box-open"></i> Productos
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/dashboard/orders"
-                className={
-                  location.pathname === "/dashboard/orders" ? "active" : ""
-                }
-              >
-                <i className="fas fa-shopping-cart"></i> Pedidos
               </Link>
             </li>
             <li>

@@ -9,13 +9,3 @@ const Orders = () => {
 };
 
 export default Orders;
-
-// function Products() {
-//   return (
-//     <div>
-//       <h3>Administrar Ordenes</h3>
-//     </div>
-//   );
-// }
-
-// export default Products;
