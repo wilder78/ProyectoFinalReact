@@ -1,41 +1,78 @@
 import React, { useState, useEffect } from "react";
-import { useCart } from "../cart/CartContext"; // Importa el hook useCart
+import { useCart } from "../cart/CartContext";
+import {
+  FaShoppingCart,
+  FaSearch,
+  FaSpinner,
+  FaRedo,
+  FaStar,
+} from "react-icons/fa";
 import "./Products.css";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("phone");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
 
-  // Usa el contexto del carrito en lugar del estado local
   const { addToCart, getCartItemCount } = useCart();
 
-  // Términos de búsqueda para productos tecnológicos
-  const techCategories = [
-    { term: "phone", name: "Smartphones" },
-    { term: "laptop", name: "Laptops" },
-    { term: "monitor", name: "Monitores" },
-    { term: "tablet", name: "Tablets" },
-    { term: "camera", name: "Cámaras" },
-  ];
+  // Obtener categorías disponibles
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch(
+          "https://api.escuelajs.co/api/v1/categories"
+        );
+        if (!response.ok) {
+          throw new Error("Error al cargar categorías");
+        }
+        const data = await response.json();
+        setCategories(data.slice(0, 5)); // Limitar a 5 categorías principales
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
 
+    fetchCategories();
+  }, []);
+
+  // Obtener productos
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
-          `https://dummyjson.com/products/search?q=${searchTerm}&limit=8`
-        );
+        setError(null);
+
+        let url = "https://api.escuelajs.co/api/v1/products";
+        if (categoryFilter) {
+          url = `https://api.escuelajs.co/api/v1/products/?categoryId=${categoryFilter}`;
+        }
+
+        const response = await fetch(url);
         if (!response.ok) {
           throw new Error("Error al cargar los productos");
         }
         const data = await response.json();
-        // Filtrar solo productos con imágenes y descripción
-        const filteredProducts = data.products.filter(
-          (product) => product.thumbnail && product.description
-        );
-        setProducts(filteredProducts);
+
+        // Filtrar por término de búsqueda si existe
+        const filtered = searchTerm
+          ? data.filter(
+              (product) =>
+                product.title
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase()) ||
+                product.description
+                  .toLowerCase()
+                  .includes(searchTerm.toLowerCase())
+            )
+          : data;
+
+        setProducts(filtered);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -44,17 +81,51 @@ function Products() {
     };
 
     fetchProducts();
-  }, [searchTerm]);
+  }, [categoryFilter]);
+
+  // Paginación
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+  const totalPages = Math.ceil(products.length / productsPerPage);
 
   const handleAddToCart = (product) => {
-    addToCart(product); // Usa la función del contexto
+    addToCart({
+      ...product,
+      // Asegurar campos compatibles con tu carrito
+      price: product.price,
+      thumbnail:
+        product.images?.[0] ||
+        "https://via.placeholder.com/300x200?text=Imagen+no+disponible",
+      quantity: 1,
+    });
     alert(`${product.title} añadido al carrito`);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setCurrentPage(1); // Resetear a primera página al buscar
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    setCategoryFilter(categoryId);
+    setSearchTerm("");
+    setCurrentPage(1);
+  };
+
+  const handleLoadMore = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
   };
 
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="loading-spinner"></div>
+        <FaSpinner className="spinner" />
         <p>Cargando productos...</p>
       </div>
     );
@@ -64,22 +135,45 @@ function Products() {
     return (
       <div className="error-message">
         <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Reintentar</button>
+        <button onClick={() => window.location.reload()}>
+          <FaRedo /> Reintentar
+        </button>
       </div>
     );
   }
 
   return (
     <div className="products-container">
-      <h1 className="products-title">Productos Tecnológicos</h1>
+      <h1 className="products-title">Nuestros Productos</h1>
 
       <div className="search-controls">
+        <form onSubmit={handleSearch} className="search-form">
+          <div className="search-input-container">
+            <FaSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Buscar productos..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <button type="submit" className="search-button">
+            Buscar
+          </button>
+        </form>
+
         <div className="category-filter">
-          {techCategories.map((cat) => (
+          <button
+            className={!categoryFilter ? "active" : ""}
+            onClick={() => handleCategoryChange("")}
+          >
+            Todos
+          </button>
+          {categories.map((cat) => (
             <button
-              key={cat.term}
-              className={searchTerm === cat.term ? "active" : ""}
-              onClick={() => setSearchTerm(cat.term)}
+              key={cat.id}
+              className={categoryFilter === cat.id.toString() ? "active" : ""}
+              onClick={() => handleCategoryChange(cat.id)}
             >
               {cat.name}
             </button>
@@ -87,28 +181,43 @@ function Products() {
         </div>
 
         <div className="cart-summary">
-          <i className="fas fa-shopping-cart"></i>
-          <span>{getCartItemCount()} items</span>{" "}
-          {/* Usa la función del contexto */}
+          <FaShoppingCart className="cart-icon" />
+          <span className="cart-count">{getCartItemCount()}</span>
         </div>
       </div>
 
-      {products.length === 0 ? (
+      {currentProducts.length === 0 ? (
         <div className="no-products">
-          <p>No hay productos disponibles en esta categoría</p>
+          <img
+            src="https://cdn.dribbble.com/users/2382015/screenshots/6065978/media/8b4662f8023e4e2295f865106b5d3a7e.gif"
+            alt="No hay productos"
+            className="no-products-image"
+          />
+          <h3>No encontramos productos</h3>
+          <p>Intenta con otra categoría o término de búsqueda</p>
+          <button
+            onClick={() => {
+              setSearchTerm("");
+              setCategoryFilter("");
+            }}
+            className="reset-filters"
+          >
+            Mostrar todos los productos
+          </button>
         </div>
       ) : (
         <>
           <div className="products-grid">
-            {products.map((product) => (
+            {currentProducts.map((product) => (
               <div key={product.id} className="product-card">
-                {product.discountPercentage > 0 && (
-                  <div className="product-badge">
-                    -{Math.round(product.discountPercentage)}%
-                  </div>
+                {product.price > 500 && (
+                  <div className="product-badge">Premium</div>
                 )}
                 <img
-                  src={product.thumbnail}
+                  src={
+                    product.images?.[0] ||
+                    "https://via.placeholder.com/300x200?text=Imagen+no+disponible"
+                  }
                   alt={product.title}
                   className="product-image"
                   onError={(e) => {
@@ -118,66 +227,58 @@ function Products() {
                 />
                 <div className="product-info">
                   <h3 className="product-title">{product.title}</h3>
-                  <p className="product-brand">{product.brand}</p>
+                  <p className="product-category">
+                    {product.category?.name || "Sin categoría"}
+                  </p>
                   <p className="product-description">
-                    {product.description.length > 60
+                    {product.description?.length > 60
                       ? `${product.description.substring(0, 60)}...`
-                      : product.description}
+                      : product.description || "Descripción no disponible"}
                   </p>
 
                   <div className="product-price-container">
                     <span className="product-price">${product.price}</span>
-                    {product.discountPercentage > 0 && (
-                      <span className="product-original-price">
-                        $
-                        {Math.round(
-                          product.price / (1 - product.discountPercentage / 100)
-                        )}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="product-meta">
                     <div className="product-rating">
-                      <div className="rating-stars">
-                        {[...Array(5)].map((_, i) => (
-                          <span
-                            key={i}
-                            className={
-                              i < Math.round(product.rating) ? "filled" : ""
-                            }
-                          >
-                            ★
-                          </span>
-                        ))}
-                      </div>
-                      <span>{product.rating}/5</span>
+                      <FaStar className="rating-star" />
+                      <span>4.5</span>{" "}
+                      {/* Esta API no tiene rating, puedes personalizarlo */}
                     </div>
-                    <span className="product-stock">
-                      {product.stock} disponibles
-                    </span>
                   </div>
 
                   <button
                     className="add-to-cart-btn"
                     onClick={() => handleAddToCart(product)}
                   >
-                    <i className="fas fa-shopping-cart"></i> Añadir al carrito
+                    <FaShoppingCart /> Añadir al carrito
                   </button>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="load-more">
-            <button
-              onClick={() => {
-                alert("Funcionalidad de cargar más productos");
-              }}
-            >
-              Mostrar más productos
-            </button>
-          </div>
+          {totalPages > 1 && (
+            <div className="pagination-controls">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Anterior
+              </button>
+
+              <span>
+                Página {currentPage} de {totalPages}
+              </span>
+
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+              >
+                Siguiente
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
